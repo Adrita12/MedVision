@@ -17,7 +17,7 @@ def open_verify():
 
 # Create the initial page GUI window
 initial_page = tk.Tk()
-initial_page.title("Initial Page")
+initial_page.title("HOME PAGE")
 
 initial_page.configure(bg="lightblue")
 # Get screen width and height
@@ -35,18 +35,26 @@ y_offset = (screen_height - window_height) // 2
 # Set window geometry with calculated offsets
 initial_page.geometry(f"{window_width}x{window_height}+{x_offset}+{y_offset}")
 
-button_frame = tk.Frame(initial_page)
-button_frame.pack(fill="both", expand=True)  # Fill available space horizontally and vertically
+# Add a heading "MedVision"
+heading_label = tk.Label(initial_page, text="MedVision", font=("Arial", 24), bg="lightblue")
+heading_label.pack(pady=20)
+
+button_frame = tk.Frame(initial_page, bg="lightblue")
+button_frame.pack(fill="both", expand=True)
+
+# Create style for buttons
+style = ttk.Style()
+style.configure("Custom.TButton", font=("Arial", 24, "bold"))
 
 # Create buttons with the custom style and pack them in the frame
 ocr_button = ttk.Button(button_frame, text="OCR", style="Custom.TButton", command=open_spor)
-ocr_button.pack(side="top", pady=10, expand=True)  # Pack at top, with padding and expand
+ocr_button.pack(side="left", padx=20, pady=20, expand=True, fill="both")  # Pack at left with padding and expand
 
 manual_entry_button = ttk.Button(button_frame, text="Manual Entry", style="Custom.TButton", command=open_manual_entry)
-manual_entry_button.pack(side="top", pady=10, expand=True)  # Pack at top, with padding and expand
+manual_entry_button.pack(side="left", padx=20, pady=20, expand=True, fill="both")  # Pack at left with padding and expand
 
 verify_button = ttk.Button(button_frame, text="Verify", style="Custom.TButton", command=open_verify)
-verify_button.pack(side="top", pady=10, expand=True)  # Pack at top, with padding and expand
+verify_button.pack(side="left", padx=20, pady=20, expand=True, fill="both")  # Pack at left with padding and expand
 
 # Run the initial page GUI main loop
 initial_page.mainloop()
