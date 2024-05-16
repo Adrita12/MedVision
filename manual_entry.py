@@ -22,8 +22,6 @@ def clear_fields():
     duration_entry.delete(0, 'end')
 
 
-import pandas as pd
-
 
 def save_to_excel(medicine_name, time, duration, filename="medicine_data.xlsx"):
     try:
@@ -50,34 +48,72 @@ def save_to_excel(medicine_name, time, duration, filename="medicine_data.xlsx"):
 # Create the GUI window
 window = tk.Tk()
 window.title("Manual Entry")
-window.geometry("400x350")
+window.geometry("680x580")
+window.config(bg='lightblue')
 
-# Create a table to display manual entries
+header_frame = ttk.Frame(window, relief='raised', borderwidth=2)
+header_frame.pack(fill='x', pady=10)
+
+# Title label
+title_label = ttk.Label(header_frame, text="Manual Entry", font=("Arial", 20))
+title_label.pack(pady=5)
+
+# Content area frame
+content_frame = ttk.Frame(window)
+content_frame.pack(fill='both', expand=True, pady=10)
+
+style = ttk.Style()
+style.map('Treeview', background='lightblue')  # Set background for the entire Treeview
+style.map('Treeview.Heading', background='lightgray', font=[('!disabled', ('Arial', 12, 'bold'))])  # Style for headings
+
 columns = ('Medicine Name', 'Time', 'Duration (Days)')
-medicine_table = ttk.Treeview(window, columns=columns, show='headings')
+medicine_table = ttk.Treeview(content_frame, columns=columns, show='headings', style='Treeview')
 
 # Define column headings
 for col in columns:
     medicine_table.heading(col, text=col)
+    # Adjust column width here (adjust values as needed)
+    medicine_table.column(col, width=100)
 
-# Add table to window
+# Add table scrollbar
+table_scrollbar = ttk.Scrollbar(content_frame, orient=tk.VERTICAL, command=medicine_table.yview)
+medicine_table.configure(yscrollcommand=table_scrollbar.set)
+table_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
 medicine_table.pack(fill='both', expand=True)
 
-# Add entry fields for manual entry
-medicine_name_label = ttk.Label(window, text="Medicine Name:")
-medicine_name_label.pack(pady=5)
-medicine_name_entry = ttk.Entry(window)
-medicine_name_entry.pack(pady=5)
 
-time_label = ttk.Label(window, text="Time (e.g., 11am, 12pm):")
-time_label.pack(pady=5)
-time_entry = ttk.Entry(window)
-time_entry.pack(pady=5)
 
-duration_label = ttk.Label(window, text="Duration (Days):")
-duration_label.pack(pady=5)
-duration_entry = ttk.Entry(window)
-duration_entry.pack(pady=5)
+# Medicine Name section
+medicine_name_frame = ttk.Frame(content_frame)
+medicine_name_frame.pack(pady=5)
+
+medicine_name_label = ttk.Label(medicine_name_frame, text="Medicine Name:", font=("Arial", 12))
+medicine_name_label.pack(side=tk.LEFT)
+
+medicine_name_entry = ttk.Entry(medicine_name_frame, background="lightblue")
+medicine_name_entry.pack(side=tk.RIGHT, fill=tk.X, expand=True)
+
+# Time section (similar structure as medicine name)
+time_frame = ttk.Frame(content_frame)
+time_frame.pack(pady=5)
+
+time_label = ttk.Label(time_frame, text="Time (e.g., 11:00, 22:15):", font=("Arial", 12))
+time_label.pack(side=tk.LEFT)
+
+time_entry = ttk.Entry(time_frame, background="lightblue")
+time_entry.pack(side=tk.RIGHT, fill=tk.X, expand=True)
+
+# Duration section (similar structure as medicine name)
+duration_frame = ttk.Frame(content_frame)
+duration_frame.pack(pady=5)
+
+duration_label = ttk.Label(duration_frame, text="Duration (Days):", font=("Arial", 12))
+duration_label.pack(side=tk.LEFT)
+
+duration_entry = ttk.Entry(duration_frame, background="lightblue")
+duration_entry.pack(side=tk.RIGHT, fill=tk.X, expand=True)
+
 
 # Add button to add entry
 add_button = ttk.Button(window, text="Add Entry", command=add_entry)
