@@ -1,5 +1,6 @@
 import re
 import openpyxl
+#Openpyxl is a popular Python library designed for reading and writing data to Excel files (.xlsx format).
 import pandas as pd
 def extract_drug_info(text):
   drug_names = []
@@ -12,6 +13,7 @@ def extract_drug_info(text):
   drug_name_pattern = r'\b(?:(?:TAB|CAP|TABLET|INJECTION|CREAM)\s+[A-Za-z][a-z0-9/]+|(?:[A-Za-z][a-z0-9/]+\s+(?:TAB|CAP|TABLET|INJECTION|CREAM)))\b'
 
   for line in text.splitlines():
+    # find all non-overlapping matches of a regex pattern within a string.
     drug_name_match = re.findall(drug_name_pattern, line, re.IGNORECASE)
     duration_match = re.findall(duration_pattern, line, re.IGNORECASE)
     timing_match = re.findall(timing_pattern, line, re.IGNORECASE)
@@ -24,17 +26,18 @@ def extract_drug_info(text):
   return drug_names, durations, timings
 
 
-# ... (rest of your code to write to Excel)
 def write_to_excel(drug_names,  durations, timings, filename="drug_info.xlsx"):
     """
     Writes extracted drug information to an Excel file.
     """
+    #create a new Excel workbook and to access the active worksheet within that workbook.
     workbook = openpyxl.Workbook()
     sheet = workbook.active
     sheet.cell(row=1, column=1).value = "Medicine Name"
     sheet.cell(row=1, column=2).value = "Duration"
     sheet.cell(row=1, column=3).value = "Time"
-
+#The enumerate function in Python is a built-in function used to iterate over iterables (like lists, tuples, strings)
+# and keep track of the index (position) for each element.
     for i, (name, duration, timing) in enumerate(zip(drug_names, durations, timings), start=2):
         sheet.cell(row=i, column=1).value = name
         sheet.cell(row=i, column=2).value = duration
@@ -42,22 +45,10 @@ def write_to_excel(drug_names,  durations, timings, filename="drug_info.xlsx"):
 
     workbook.save(filename)
 
-if __name__ == "__main__":
-    text = '''
-    Medicine Name Dosage Duration
-    1) TAB ABCIXIMAB,10mg 1 Morning 8 days
-    2) TAB VOMILAST 1 Morning, 1 Night (Total 16 Tabs)
-    4) TAB GESTAKIND 10/5R 1 Night 4 Days (Total 8 Tabs)
-    3) CAP ZOCLAR 500 1 Morning 3 Days (Total 3 Caps)
-    ...'''
-
+def process_text(text):
     drug_names, durations, timings = extract_drug_info(text)
-
     write_to_excel(drug_names, durations, timings)
-
     print("Drug information written to 'drug_info.xlsx'.")
-
-    # import pandas as pd
 
     # Read the two Excel files into DataFrames
     df1 = pd.read_excel('drug_info.xlsx')
@@ -72,4 +63,10 @@ if __name__ == "__main__":
 
     print("Merged file saved as 'merged_file.xlsx'.")
 
-    # print("databases merged succesfully")
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        text = sys.argv[1]
+        process_text(text)
+    else:
+        print("No text input provided.")
